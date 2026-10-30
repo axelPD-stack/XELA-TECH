@@ -2,359 +2,33 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PROYECTO_XELATECH
 {
-    class Cliente
-    {
-        private string codigo;
-        private string  nombre;
-        private string numeroTelefono;
-        private string correo;
-        private string tipoCliente;
-
-        private int cantidadSolicitudes;
-
-        public int CantidadSolicitudes
-        {
-            get { return cantidadSolicitudes; }
-            set { 
-                if(value >= 0)
-                {
-                    CantidadSolicitudes = value;
-                }
-                else
-                {
-                    Console.WriteLine("Dato no valido");
-                }    
-                
-                        }
-        }
-        public string TipoCliente
-        {
-            get { return tipoCliente; }
-            set { 
-            if (!string.IsNullOrEmpty(value))
-                {
-                    tipoCliente = value;
-                }
-            else
-                {
-                    Console.WriteLine("Dato Invalido");
-                }
-            }
-        }
-        public string Correo
-        {
-            get { return correo; }
-            set { 
-            if (!string.IsNullOrWhiteSpace(value))
-                {
-                    correo = value;
-                }
-            else
-                {
-                    Console.WriteLine("Dato Invalido");
-                }
-            }
-        }
-        public string NumeroTelefono
-        {
-            get { return numeroTelefono; }
-            set { 
-            if(!string.IsNullOrWhiteSpace(value))
-                {
-                    numeroTelefono = value;
-                }
-            else
-                {
-                    Console.WriteLine("Dato Invalido");
-                }
-            }
-        }
-        public string  Nombre
-        {
-            get { return nombre; }
-            set { 
-            if(!string.IsNullOrWhiteSpace(value))
-                {
-                    nombre = value;
-                }
-            else
-                {
-                    Console.WriteLine("Dato Invalido");
-                }
-
-             }
-        }
-        public string Codigo
-        {
-            get { return codigo; }
-            set {
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    codigo = value;
-                }
-                else
-                {
-                    Console.WriteLine("");
-                }
-
-                }
-        }
-
-        public Cliente(string codigo, string nombre, string numerotelefono, string correo, string tipocliente, int cantidadolicitudes)
-        {
-            Codigo = codigo;
-            Nombre = nombre;
-            NumeroTelefono = numerotelefono;
-            Correo = correo;
-            TipoCliente = tipocliente;
-            CantidadSolicitudes = cantidadolicitudes;
-
-        }
-
-        public void MostrarInformacion()
-        {
-            Console.WriteLine($"El codigo es: {Codigo}" );
-            Console.WriteLine($"El nombre es: {Nombre}");
-            Console.WriteLine($"EL numero de telefono es: {NumeroTelefono} ");
-            Console.WriteLine($"El Correo Electronico es: {Correo}");
-            Console.WriteLine($"El tipo de Cliente es: {TipoCliente}");
-            Console.WriteLine($"La Cantidad de Solicitudes es: {CantidadSolicitudes}");
-        }
-            
-    }
-
-    class Tecnico
-    {
-        private string codigo;
-        private string nombreCompleto;
-        private string especialidad;
-        private int trabajosactivos;
-        private int serviciosfinalizados;
-        private double calificacionpromedio;
-        private int limitetrabajos;
-
-        public int LimitesTrabajos
-        {
-            get { return limitetrabajos; }
-            set {
-                if (limitetrabajos >= 0)
-                {
-                    limitetrabajos  = value;
-                }
-                else
-                {
-                    Console.WriteLine("Dato invalido");
-                }
-            }
-        }
-        public double CalificacionPromedio
-        {
-            get { return calificacionpromedio; }
-            set { 
-            if(calificacionpromedio >= 0)
-                {
-                    calificacionpromedio = value;
-                }
-            else
-                {
-                    Console.WriteLine("Dato invalido");
-                }
-            }
-        }
-        public int ServiciosFinalizados
-        {
-            get { return serviciosfinalizados; }
-            set { 
-            if( serviciosfinalizados >= 0)
-                {
-                    serviciosfinalizados = value;
-                }
-            else
-                {
-                    Console.WriteLine("Dato invalido");
-                }
-            }
-        }
-        public int TrabajosActivos
-        {
-            get { return trabajosactivos; }
-            set {
-            if (trabajosactivos >= 0)
-                {
-                    trabajosactivos = value;
-                }
-            else
-                {
-                    Console.WriteLine("Dato Invalido");
-                }
-            }
-        }
-        public string Especialidad
-        {
-            get { return especialidad; }
-            set { 
-                if(!string.IsNullOrWhiteSpace(value))
-                {
-                    especialidad = value;
-                }
-                else
-                {
-                    Console.WriteLine("Dato Invalido");
-                }
-            }
-        }
-        public string NombreCompleto
-        {
-            get { return nombreCompleto; }
-            set { 
-            if (!string.IsNullOrWhiteSpace(value))
-                {
-                    nombreCompleto = value;
-                }
-            else
-                {
-                    Console.WriteLine("Dato Invalido");
-                }
-            }
-        }
-        public string Codigo
-        {
-            get { return codigo; }
-            set { if(!string.IsNullOrWhiteSpace(value))
-                {
-                    codigo = value;
-                }
-            else
-                {
-                    Console.WriteLine("");
-                }
-            }
-        }
-
-
-        public Tecnico(string codigo, string nombrecompleto, string especializacion, int trabajosactivos, int serviciosfinalizados, double calificacionpromedio, int limitetrabajos)
-        {
-            Codigo = codigo;
-            NombreCompleto = nombrecompleto;
-            Especialidad = especializacion;
-            TrabajosActivos = trabajosactivos;
-            ServiciosFinalizados = serviciosfinalizados;
-            CalificacionPromedio = calificacionpromedio;
-            LimitesTrabajos = limitetrabajos;
-        }
-
-        public void MostrarInformacion()
-        {
-            Console.WriteLine($"El codigo es: {Codigo}");
-            Console.WriteLine($"El nombre es: {NombreCompleto}");
-            Console.WriteLine($"La especialidad es: {Especialidad}");
-            Console.WriteLine($"Los trabajos activos son: {TrabajosActivos}");
-            Console.WriteLine($"Los servicios finalizados son: {ServiciosFinalizados}");
-            Console.WriteLine($"La calificacion promedio es: {CalificacionPromedio}");
-            Console.WriteLine($"El limite de trabajos es: {LimitesTrabajos}");
-        }
-
-       
-    }
-
-    class Repuesto
-    {
-        private string codigo;
-        private string nombre;
-        private string categoria;
-        private int existencia;
-        private int existenciaMinima;
-        private double costo;
-        private double precioVenta;
-        private int cantidadutilizada;
-
-        public int CantidadUtilizada
-        {
-            get { return cantidadutilizada; }
-            set { cantidadutilizada = value; }
-        }
-
-        public double PrecioVenta
-        {
-            get { return precioVenta; }
-            set { precioVenta = value; }
-        }
-
-
-        public double Costo
-        {
-            get { return costo; }
-            set { costo = value; }
-        }
-
-
-        public int ExistenciaMinima
-        {
-            get { return existenciaMinima; }
-            set { existenciaMinima = value; }
-        }
-
-
-        public int Existencia
-        {
-            get { return existencia; }
-            set { existencia = value; }
-        }
-
-
-        public string Categoria
-        {
-            get { return categoria; }
-            set { categoria = value; }
-        }
-
-
-        public string Nombre
-        {
-            get { return nombre; }
-            set { nombre = value; }
-        }
-
-
-        public string Codigo
-        {
-            get { return codigo; }
-            set { codigo = value; }
-        }
-
-
-    }
-   
-   
     internal class Program
     {
         static int Comprobar(string mensaje, int min, int max)
         {
             int valor;
-            bool Esvalido;
-            
+            bool esValido;
 
             do
             {
-                Console.WriteLine(mensaje);
-                string entrada = Console.ReadLine();
-                Esvalido = int.TryParse(entrada, out valor);
+                Console.Write(mensaje);
+                string entrada = Console.ReadLine() ?? "";
 
-                if (!Esvalido)
-                {
-                    Console.WriteLine("Dato Invalido");
-                }
+                esValido = int.TryParse(entrada, out valor);
+
+                if (!esValido)
+                    Console.WriteLine("Dato invalido");
                 else if (valor < min || valor > max)
                 {
-                    Console.WriteLine("El valor ingresado deber estar" + min + " y " + max);
-                    Esvalido = false;
+                    Console.WriteLine("El valor debe estar entre " + min + " y " + max);
+                    esValido = false;
                 }
-            } while (!Esvalido);
+
+            } while (!esValido);
+
             return valor;
         }
 
@@ -366,18 +40,21 @@ namespace PROYECTO_XELATECH
             do
             {
                 Console.Write(mensaje);
-                string entrada = Console.ReadLine();
-                esValido = double.TryParse(entrada, NumberStyles.Any, CultureInfo.InvariantCulture, out valor);
+                string entrada = Console.ReadLine() ?? "";
+
+                esValido = double.TryParse(
+                    entrada, NumberStyles.Any,
+                    CultureInfo.InvariantCulture, out valor);
 
                 if (!esValido)
+                    Console.WriteLine("Dato invalido");
+                else if (double.IsNaN(valor) || double.IsInfinity(valor) ||
+                         valor < min || valor > max)
                 {
-                    Console.WriteLine("Ingrese un número válido (use punto para decimales).");
-                }
-                else if (valor < min || valor > max)
-                {
-                    Console.WriteLine($"El valor debe estar entre {min} y {max}.");
+                    Console.WriteLine("El valor debe estar entre " + min + " y " + max);
                     esValido = false;
                 }
+
             } while (!esValido);
 
             return valor;
@@ -385,219 +62,438 @@ namespace PROYECTO_XELATECH
 
 
 
+        static string ComprobacionTexto(string mensaje)
+        {
+            string entrada;
+
+            do
+            {
+                Console.Write(mensaje);
+                entrada = Console.ReadLine() ?? "";
+
+                if (string.IsNullOrWhiteSpace(entrada))
+                    Console.WriteLine("Dato invalido");
+
+            } while (string.IsNullOrWhiteSpace(entrada));
+
+            return entrada.Trim();
+        }
+
+        static string ComprobacionLongitud(string mensaje, int longitudRequerida)
+        {
+            string entrada;
+            bool esValido;
+
+            do
+            {
+                Console.Write(mensaje);
+                entrada = Console.ReadLine() ?? "";
+
+                bool soloDigitos = entrada.All(char.IsDigit);
+                esValido = soloDigitos && entrada.Length == longitudRequerida;
+
+                if (!soloDigitos)
+                    Console.WriteLine("Solo se permiten digitos");
+                else if (entrada.Length != longitudRequerida)
+                    Console.WriteLine("Debe ingresar exactamente " + longitudRequerida + " digitos");
+
+            } while (!esValido);
+
+            return entrada;
+        }
+
+        static string ComprobacionCorreo(string mensaje)
+        {
+            string entrada;
+            bool esValido;
+
+            do
+            {
+                Console.Write(mensaje);
+                entrada = (Console.ReadLine() ?? "").Trim();
+
+                int arroba = entrada.IndexOf('@');
+                bool tieneArroba = arroba > 0 &&
+                                   arroba == entrada.LastIndexOf('@');
+
+                bool tieneDominio = tieneArroba &&
+                    entrada.Substring(arroba + 1).Contains(".") &&
+                    !entrada.EndsWith(".");
+
+                esValido = tieneArroba && tieneDominio;
+
+                if (!esValido)
+                    Console.WriteLine("Dato invalido");
+
+            } while (!esValido);
+
+            return entrada;
+        }
+
+
+
+
+
+      
+
+        static string SeleccionarTipoCliente()
+        {
+            Console.WriteLine("1. Estudiante");
+            Console.WriteLine("2. Profesional");
+            Console.WriteLine("3. Pequeno negocio");
+            Console.WriteLine("4. Institucion");
+
+            int opcion = Comprobar("Seleccione el tipo de cliente: ", 1, 4);
+
+            switch (opcion)
+            {
+                case 1: return "Estudiante";
+                case 2: return "Profesional";
+                case 3: return "Pequeño negocio";
+                default: return "Institución";
+            }
+        }
+
+
+
+
+
+
+
+        static void RegistrarCliente(List<Cliente> clientes)
+        {
+            int consecutivo = clientes.Count + 1;
+            string codigo;
+
+            do
+            {
+                codigo = "CLI" + consecutivo.ToString("D3");
+                consecutivo++;
+            }
+            while (clientes.Any(c =>
+                string.Equals(c.Codigo, codigo,
+                    StringComparison.OrdinalIgnoreCase)));
+
+            string nombre = ComprobacionTexto("Ingrese el nombre completo: ");
+            string telefono = ComprobacionLongitud("Ingrese el telefono de 8 digitos: ", 8);
+            string correo = ComprobacionCorreo("Ingrese el correo electronico: ");
+            string tipo = SeleccionarTipoCliente();
+
+            Cliente nuevo = new Cliente(codigo, nombre, telefono, correo, tipo, 0);
+            clientes.Add(nuevo);
+
+            Console.WriteLine("Cliente registrado correctamente.");
+            nuevo.MostrarInformacion();
+        }
+
+        static void ConsultarCliente(List<Cliente> clientes)
+        {
+            if (clientes.Count == 0)
+            {
+                Console.WriteLine("No hay clientes registrados.");
+                return;
+            }
+
+            string codigo = ComprobacionTexto("Ingrese el codigo del cliente: ");
+
+            Cliente encontrado = clientes.FirstOrDefault(c =>
+                string.Equals(c.Codigo, codigo,
+                    StringComparison.OrdinalIgnoreCase));
+
+            if (encontrado != null)
+                encontrado.MostrarInformacion();
+            else
+                Console.WriteLine("Cliente no encontrado.");
+        }
+
+        static void ActualizarCliente(List<Cliente> clientes)
+        {
+            if (clientes.Count == 0)
+            {
+                Console.WriteLine("No hay clientes registrados.");
+                return;
+            }
+
+            string codigo = ComprobacionTexto("Ingrese el codigo del cliente: ");
+
+            Cliente encontrado = clientes.FirstOrDefault(c =>
+                string.Equals(c.Codigo, codigo,
+                    StringComparison.OrdinalIgnoreCase));
+
+            if (encontrado == null)
+            {
+                Console.WriteLine("Cliente no encontrado.");
+                return;
+            }
+
+            encontrado.Nombre = ComprobacionTexto("Ingrese el nuevo nombre: ");
+            encontrado.NumeroTelefono = ComprobacionLongitud("Ingrese el nuevo telefono: ", 8);
+            encontrado.Correo = ComprobacionCorreo("Ingrese el nuevo correo: ");
+            encontrado.TipoCliente = SeleccionarTipoCliente();
+
+            Console.WriteLine("Cliente actualizado correctamente.");
+            encontrado.MostrarInformacion();
+        }
+
+        static void MostrarClientes(List<Cliente> clientes)
+        {
+            if (clientes.Count == 0)
+            {
+                Console.WriteLine("No hay clientes registrados.");
+                return;
+            }
+
+            foreach (Cliente cliente in clientes)
+            {
+                Console.WriteLine("------------------------------");
+                cliente.MostrarInformacion();
+            }
+
+            Console.WriteLine("Total de clientes: " + clientes.Count);
+        }
+
+        static void MenuClientes(List<Cliente> clientes)
+        {
+            int opcion;
+
+            do
+            {
+                Console.WriteLine("\n===== GESTION DE CLIENTES =====");
+                Console.WriteLine("1. Registrar cliente");
+                Console.WriteLine("2. Consultar cliente");
+                Console.WriteLine("3. Actualizar datos");
+                Console.WriteLine("4. Mostrar clientes");
+                Console.WriteLine("5. Volver");
+
+                opcion = Comprobar("Ingrese una opcion: ", 1, 5);
+
+                switch (opcion)
+                {
+                    case 1: RegistrarCliente(clientes); break;
+                    case 2: ConsultarCliente(clientes); break;
+                    case 3: ActualizarCliente(clientes); break;
+                    case 4: MostrarClientes(clientes); break;
+                    case 5: break;
+                }
+
+                if (opcion != 5)
+                {
+                    Console.WriteLine("Presione una tecla para continuar...");
+                    Console.ReadKey();
+                    Console.Clear();
+                }
+
+            } while (opcion != 5);
+        }
+
+        
+
+
+
+
+
+
+        static string SeleccionarEspecialidadTecnico()
+        {
+            Console.WriteLine("1. Computadoras portatiles");
+            Console.WriteLine("2. Computadoras de escritorio");
+            Console.WriteLine("3. Impresoras");
+
+            int opcion = Comprobar("Seleccione la especialidad: ", 1, 3);
+
+            switch (opcion)
+            {
+                case 1: return "Computadoras portátiles";
+                case 2: return "Computadoras de escritorio";
+                default: return "Impresoras";
+            }
+        }
+
+        static void RegistrarTecnico(List<Tecnico> tecnicos)
+        {
+            int consecutivo = tecnicos.Count + 1;
+            string codigo;
+
+            do
+            {
+                codigo = "TEC" + consecutivo.ToString("D3");
+                consecutivo++;
+            }
+            while (tecnicos.Any(t =>
+                string.Equals(t.Codigo, codigo,
+                    StringComparison.OrdinalIgnoreCase)));
+
+            string nombre = ComprobacionTexto("Ingrese el nombre completo: ");
+            string especialidad = SeleccionarEspecialidadTecnico();
+            int limite = Comprobar("Ingrese el limite de trabajos activos: ", 1, 10);
+
+            Tecnico nuevo = new Tecnico(
+                codigo, nombre, especialidad, 0, 0, 0, limite);
+
+            tecnicos.Add(nuevo);
+
+            Console.WriteLine("Tecnico registrado correctamente.");
+            nuevo.MostrarInformacion();
+        }
+
+        static void ConsultarTecnico(List<Tecnico> tecnicos)
+        {
+            if (tecnicos.Count == 0)
+            {
+                Console.WriteLine("No hay tecnicos registrados.");
+                return;
+            }
+
+            string codigo = ComprobacionTexto("Ingrese el codigo del tecnico: ");
+
+            Tecnico encontrado = tecnicos.FirstOrDefault(t =>
+                string.Equals(t.Codigo, codigo,
+                    StringComparison.OrdinalIgnoreCase));
+
+            if (encontrado != null)
+                encontrado.MostrarInformacion();
+            else
+                Console.WriteLine("Tecnico no encontrado.");
+        }
+
+        static void ActualizarTecnico(List<Tecnico> tecnicos)
+        {
+            if (tecnicos.Count == 0)
+            {
+                Console.WriteLine("No hay tecnicos registrados.");
+                return;
+            }
+
+            string codigo = ComprobacionTexto("Ingrese el codigo del tecnico: ");
+
+            Tecnico encontrado = tecnicos.FirstOrDefault(t =>
+                string.Equals(t.Codigo, codigo,
+                    StringComparison.OrdinalIgnoreCase));
+
+            if (encontrado == null)
+            {
+                Console.WriteLine("Tecnico no encontrado.");
+                return;
+            }
+
+            encontrado.NombreCompleto = ComprobacionTexto("Ingrese el nuevo nombre: ");
+            encontrado.Especialidad = SeleccionarEspecialidadTecnico();
+
+            int minimo = Math.Max(1, encontrado.TrabajosActivos);
+            encontrado.LimitesTrabajos = Comprobar(
+                "Ingrese el nuevo limite de trabajos: ", minimo, 10);
+
+            Console.WriteLine("Tecnico actualizado correctamente.");
+            encontrado.MostrarInformacion();
+        }
+
+        static void MostrarTecnicos(List<Tecnico> tecnicos)
+        {
+            if (tecnicos.Count == 0)
+            {
+                Console.WriteLine("No hay tecnicos registrados.");
+                return;
+            }
+
+            foreach (Tecnico tecnico in tecnicos)
+            {
+                Console.WriteLine("------------------------------");
+                tecnico.MostrarInformacion();
+            }
+
+            Console.WriteLine("Total de tecnicos: " + tecnicos.Count);
+        }
+
+        static void MenuTecnicos(List<Tecnico> tecnicos)
+        {
+            int opcion;
+
+            do
+            {
+                Console.WriteLine("\n===== GESTION DE TECNICOS =====");
+                Console.WriteLine("1. Registrar tecnico");
+                Console.WriteLine("2. Consultar tecnico");
+                Console.WriteLine("3. Actualizar tecnico");
+                Console.WriteLine("4. Mostrar tecnicos");
+                Console.WriteLine("5. Volver");
+
+                opcion = Comprobar("Ingrese una opcion: ", 1, 5);
+
+                switch (opcion)
+                {
+                    case 1: RegistrarTecnico(tecnicos); break;
+                    case 2: ConsultarTecnico(tecnicos); break;
+                    case 3: ActualizarTecnico(tecnicos); break;
+                    case 4: MostrarTecnicos(tecnicos); break;
+                    case 5: break;
+                }
+
+                if (opcion != 5)
+                {
+                    Console.WriteLine("Presione una tecla para continuar...");
+                    Console.ReadKey();
+                    Console.Clear();
+                }
+
+            } while (opcion != 5);
+        }
+
+        // MENU PRINCIPAL
+
         static void Main(string[] args)
         {
-
-           
             List<Cliente> clientes = new List<Cliente>();
-            List <Tecnico> tecnicos = new List<Tecnico>();
-            List <Repuesto> repuestos = new List<Repuesto>();
+            List<Tecnico> tecnicos = new List<Tecnico>();
 
             int opcion;
 
             do
             {
-                Console.WriteLine("============================================\r\n XELATECH SOPORTE\r\n============================================\r\n1. Gestión de clientes\r\n2. Gestión de técnicos\r\n3. Gestión de equipos\r\n4. Gestión de solicitudes\r\n5. Gestión de repuestos\r\n6. Atención de colas\r\n7. Ordenamientos\r\n8. Búsquedas\r\n9. Reportes\r\n10. Generar datos de prueba\r\n11. Salir");
+                Console.WriteLine("\n====================================");
+                Console.WriteLine("          XELATECH SOPORTE");
+                Console.WriteLine("====================================");
+                Console.WriteLine("1. Gestion de clientes");
+                Console.WriteLine("2. Gestion de tecnicos");
+                Console.WriteLine("3. Gestion de equipos");
+                Console.WriteLine("4. Gestion de solicitudes");
+                Console.WriteLine("5. Gestion de repuestos");
+                Console.WriteLine("6. Atencion de colas");
+                Console.WriteLine("7. Ordenamientos");
+                Console.WriteLine("8. Busquedas");
+                Console.WriteLine("9. Reportes");
+                Console.WriteLine("10. Generar datos de prueba");
+                Console.WriteLine("11. Salir");
+
                 opcion = Comprobar("Ingrese un numero: ", 1, 11);
 
                 switch (opcion)
-                    
                 {
-                    
                     case 1:
-                        int opcion1;
-                        Console.Clear();
-                        Console.WriteLine("========================================");
-                        Console.WriteLine("          GESTIÓN DE CLIENTES           ");
-                        Console.WriteLine("========================================");
-                        Console.WriteLine("1. Registrar Cliente");
-                        Console.WriteLine("2. Consultar información");
-                        Console.WriteLine("3. Actualizar datos");
-                        Console.WriteLine("4. Incrementar Solicitudes");
-                        Console.WriteLine("4. Volver");
-                        opcion1 = Comprobar("Ingrese una opción: ", 1, 4);
-
-                        switch(opcion1)
-                        {
-                            case 1:
-
-                                break;
-                        }
+                        MenuClientes(clientes);
                         break;
+
                     case 2:
+                        MenuTecnicos(tecnicos);
+                        break;
+
+                    case 3:
+                    case 4:
+                    case 5:
+                    case 6:
+                    case 7:
+                    case 8:
+                    case 9:
+                    case 10:
+                        Console.WriteLine("Modulo pendiente de implementar.");
+                        Console.ReadKey();
+                        break;
+
+                    case 11:
+                        Console.WriteLine("Saliendo del programa...");
                         break;
                 }
-                    
-                   
-
-                
-
-
 
             } while (opcion != 11);
         }
-
-    }
-}
-
-
-
-using System;
-using System.Collections.Generic;
-
-class Program
-{
-    static void Main(string[] args)
-    {
-        // Estructuras principales
-        Queue<string> reservas = new Queue<string>();
-        Stack<string> mantenimientos = new Stack<string>();
-
-        int opcion;
-
-        do
-        {
-            Console.Clear();
-
-            Console.WriteLine("========== CENTRO DE CAPACITACION ==========");
-            Console.WriteLine("1. Registrar reserva");
-            Console.WriteLine("2. Confirmar siguiente reserva");
-            Console.WriteLine("3. Consultar siguiente reserva");
-            Console.WriteLine("4. Registrar solicitud de mantenimiento");
-            Console.WriteLine("5. Revisar solicitud de mantenimiento");
-            Console.WriteLine("6. Consultar siguiente solicitud de mantenimiento");
-            Console.WriteLine("7. Mostrar cantidades pendientes");
-            Console.WriteLine("8. Salir");
-            Console.WriteLine("===========================================");
-            Console.Write("Seleccione una opcion: ");
-
-            opcion = Convert.ToInt32(Console.ReadLine());
-
-            switch (opcion)
-            {
-                // OPCION 1: REGISTRAR RESERVA
-                case 1:
-
-                    Console.Write("Ingrese el nombre de la persona: ");
-                    string nombre = Console.ReadLine();
-
-                    reservas.Enqueue(nombre);
-
-                    Console.WriteLine("Reserva registrada correctamente.");
-
-                    break;
-
-                // OPCION 2: CONFIRMAR SIGUIENTE RESERVA
-                case 2:
-
-                    if (reservas.Count > 0)
-                    {
-                        string persona = reservas.Dequeue();
-
-                        Console.WriteLine("Reserva confirmada.");
-                        Console.WriteLine("Persona atendida: " + persona);
-                    }
-                    else
-                    {
-                        Console.WriteLine("No existen reservas pendientes.");
-                    }
-
-                    break;
-
-                // OPCION 3: CONSULTAR SIGUIENTE RESERVA
-                case 3:
-
-                    if (reservas.Count > 0)
-                    {
-                        string siguiente = reservas.Peek();
-
-                        Console.WriteLine("Siguiente persona en la reserva: " + siguiente);
-                    }
-                    else
-                    {
-                        Console.WriteLine("No existen reservas pendientes.");
-                    }
-
-                    break;
-
-                // OPCION 4: REGISTRAR MANTENIMIENTO
-                case 4:
-
-                    Console.Write("Ingrese el codigo de mantenimiento: ");
-                    string codigo = Console.ReadLine();
-
-                    mantenimientos.Push(codigo);
-
-                    Console.WriteLine("Solicitud de mantenimiento registrada.");
-
-                    break;
-
-                // OPCION 5: REVISAR MANTENIMIENTO
-                case 5:
-
-                    if (mantenimientos.Count > 0)
-                    {
-                        string solicitud = mantenimientos.Pop();
-
-                        Console.WriteLine("Solicitud revisada.");
-                        Console.WriteLine("Codigo de mantenimiento: " + solicitud);
-                    }
-                    else
-                    {
-                        Console.WriteLine("No existen solicitudes pendientes.");
-                    }
-
-                    break;
-
-                // OPCION 6: CONSULTAR SIGUIENTE MANTENIMIENTO
-                case 6:
-
-                    if (mantenimientos.Count > 0)
-                    {
-                        string siguienteMantenimiento = mantenimientos.Peek();
-
-                        Console.WriteLine("Siguiente solicitud de mantenimiento: "
-                            + siguienteMantenimiento);
-                    }
-                    else
-                    {
-                        Console.WriteLine("No existen solicitudes pendientes.");
-                    }
-
-                    break;
-
-                // OPCION 7: MOSTRAR CANTIDADES
-                case 7:
-
-                    Console.WriteLine("Reservas pendientes: " + reservas.Count);
-
-                    Console.WriteLine("Solicitudes de mantenimiento pendientes: "
-                        + mantenimientos.Count);
-
-                    break;
-
-                // OPCION 8: SALIR
-                case 8:
-
-                    Console.WriteLine("Saliendo del sistema...");
-
-                    break;
-
-                // OPCION INVALIDA
-                default:
-
-                    Console.WriteLine("Opcion no valida. Intente nuevamente.");
-
-                    break;
-            }
-
-            if (opcion != 8)
-            {
-                Console.WriteLine();
-                Console.WriteLine("Presione ENTER para continuar...");
-                Console.ReadLine();
-            }
-
-        } while (opcion != 8);
     }
 }
