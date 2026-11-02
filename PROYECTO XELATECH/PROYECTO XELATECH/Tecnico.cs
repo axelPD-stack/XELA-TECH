@@ -156,6 +156,7 @@ namespace PROYECTO_XELATECH
             return false;
         }
 
+       
         public void MostrarInformacion()
         {
             Console.WriteLine($"El codigo es: {Codigo}");
