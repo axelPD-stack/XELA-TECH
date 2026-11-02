@@ -1019,12 +1019,548 @@ namespace PROYECTO_XELATECH
             } while (opcion != 5);
         }
 
+
+        // ==========================================
+        // GESTION DE SOLICITUDES
+        // ==========================================
+
+        static string SeleccionarPrioridad()
+        {
+            Console.WriteLine("1. Normal");
+            Console.WriteLine("2. Urgente");
+
+            int opcion = Comprobar("Seleccione la prioridad: ", 1, 2);
+
+            if (opcion == 1)
+                return "Normal";
+            else
+                return "Urgente";
+        }
+
+        static Cliente SeleccionarClienteSolicitud(List<Cliente> clientes)
+        {
+            if (clientes.Count == 0)
+            {
+                Console.WriteLine("No hay clientes registrados.");
+                return null;
+            }
+
+            MostrarClientes(clientes);
+
+            string codigo = ComprobacionTexto(
+                "Ingrese el codigo del cliente: ");
+
+            Cliente encontrado = clientes.FirstOrDefault(c =>
+                string.Equals(c.Codigo, codigo,
+                StringComparison.OrdinalIgnoreCase));
+
+            if (encontrado == null)
+                Console.WriteLine("Cliente no encontrado.");
+
+            return encontrado;
+        }
+
+        static Equipo SeleccionarEquipoSolicitud(List<Equipo> equipos, Cliente cliente)
+        {
+            List<Equipo> equiposCliente = equipos.Where(e =>
+                e.Propietario != null &&
+                string.Equals(e.Propietario.Codigo, cliente.Codigo,
+                StringComparison.OrdinalIgnoreCase)).ToList();
+
+            if (equiposCliente.Count == 0)
+            {
+                Console.WriteLine("Este cliente no tiene equipos registrados.");
+                return null;
+            }
+
+            Console.WriteLine("\nEquipos del cliente:");
+
+            foreach (Equipo equipo in equiposCliente)
+            {
+                Console.WriteLine("Codigo: " + equipo.CodigoInterno +
+                    " | Tipo: " + equipo.TipoEquipo +
+                    " | Marca: " + equipo.Marca +
+                    " | Modelo: " + equipo.Modelo);
+            }
+
+            string codigo = ComprobacionTexto(
+                "Ingrese el codigo interno del equipo: ");
+
+            Equipo encontrado = equiposCliente.FirstOrDefault(e =>
+                string.Equals(e.CodigoInterno, codigo,
+                StringComparison.OrdinalIgnoreCase));
+
+            if (encontrado == null)
+                Console.WriteLine("Equipo no encontrado para este cliente.");
+
+            return encontrado;
+        }
+
+        static void RegistrarSolicitud(List<SolicitudServicio> solicitudes,
+            List<Cliente> clientes, List<Equipo> equipos)
+        {
+            if (clientes.Count == 0)
+            {
+                Console.WriteLine("Primero debe registrar un cliente.");
+                return;
+            }
+
+            if (equipos.Count == 0)
+            {
+                Console.WriteLine("Primero debe registrar un equipo.");
+                return;
+            }
+
+            Cliente cliente = SeleccionarClienteSolicitud(clientes);
+
+            if (cliente == null)
+                return;
+
+            Equipo equipo = SeleccionarEquipoSolicitud(equipos, cliente);
+
+            if (equipo == null)
+                return;
+
+            int consecutivo = solicitudes.Count + 1;
+            string codigo;
+
+            do
+            {
+                codigo = "SOL" + consecutivo.ToString("D3");
+                consecutivo++;
+            }
+            while (solicitudes.Any(s =>
+                string.Equals(s.Codigo, codigo,
+                StringComparison.OrdinalIgnoreCase)));
+
+            Console.WriteLine("Codigo asignado: " + codigo);
+
+            string descripcion = ComprobacionTexto(
+                "Describa el problema del equipo: ");
+
+            string prioridad = SeleccionarPrioridad();
+
+            SolicitudServicio nueva = new SolicitudServicio(
+                codigo, cliente, equipo, descripcion, prioridad);
+
+            solicitudes.Add(nueva);
+            cliente.IncrementarSolicitudes();
+
+            Console.WriteLine("Solicitud registrada correctamente.");
+            nueva.MostrarInformacion();
+        }
+
+        static SolicitudServicio BuscarSolicitudPorCodigo(
+            List<SolicitudServicio> solicitudes)
+        {
+            if (solicitudes.Count == 0)
+            {
+                Console.WriteLine("No hay solicitudes registradas.");
+                return null;
+            }
+
+            string codigo = ComprobacionTexto(
+                "Ingrese el codigo de la solicitud: ");
+
+            SolicitudServicio encontrado = solicitudes.FirstOrDefault(s =>
+                string.Equals(s.Codigo, codigo,
+                StringComparison.OrdinalIgnoreCase));
+
+            if (encontrado == null)
+                Console.WriteLine("Solicitud no encontrada.");
+
+            return encontrado;
+        }
+
+        static void ConsultarSolicitud(List<SolicitudServicio> solicitudes)
+        {
+            SolicitudServicio encontrada = BuscarSolicitudPorCodigo(solicitudes);
+
+            if (encontrada != null)
+                encontrada.MostrarInformacion();
+        }
+
+        static string SeleccionarEstadoSolicitud()
+        {
+            Console.WriteLine("1. Recibida");
+            Console.WriteLine("2. En espera");
+            Console.WriteLine("3. Asignada");
+            Console.WriteLine("4. En diagnostico");
+            Console.WriteLine("5. En reparacion");
+            Console.WriteLine("6. Lista para entregar");
+            Console.WriteLine("7. Entregada");
+            Console.WriteLine("8. Cancelada");
+
+            int opcion = Comprobar("Seleccione el estado: ", 1, 8);
+
+            switch (opcion)
+            {
+                case 1: return "Recibida";
+                case 2: return "En espera";
+                case 3: return "Asignada";
+                case 4: return "En diagnóstico";
+                case 5: return "En reparación";
+                case 6: return "Lista para entregar";
+                case 7: return "Entregada";
+                default: return "Cancelada";
+            }
+        }
+
+        static void ActualizarEstadoSolicitud(SolicitudServicio solicitud)
+        {
+            if (solicitud.Estado == "Entregada" ||
+                solicitud.Estado == "Cancelada")
+            {
+                Console.WriteLine("La solicitud ya fue cerrada y no puede cambiar de estado.");
+                return;
+            }
+
+            string estadoAnterior = solicitud.Estado;
+            string nuevoEstado = SeleccionarEstadoSolicitud();
+
+            if (nuevoEstado == "Entregada" &&
+                estadoAnterior != "Lista para entregar")
+            {
+                Console.WriteLine("Primero debe marcar la solicitud como lista para entregar.");
+                return;
+            }
+
+            if (nuevoEstado == "Entregada" && solicitud.TecnicoAsignado != null)
+            {
+                Tecnico tecnico = solicitud.TecnicoAsignado;
+
+                if (tecnico.TrabajosActivos > 0)
+                    tecnico.TrabajosActivos--;
+
+                tecnico.ServiciosFinalizados++;
+            }
+            else if (nuevoEstado == "Cancelada" &&
+                     solicitud.TecnicoAsignado != null)
+            {
+                Tecnico tecnico = solicitud.TecnicoAsignado;
+
+                if (tecnico.TrabajosActivos > 0)
+                    tecnico.TrabajosActivos--;
+            }
+
+            solicitud.Estado = nuevoEstado;
+            Console.WriteLine("Estado de la solicitud actualizado.");
+        }
+
+        static void ActualizarSolicitud(List<SolicitudServicio> solicitudes)
+        {
+            SolicitudServicio encontrada = BuscarSolicitudPorCodigo(solicitudes);
+
+            if (encontrada == null)
+                return;
+
+            if (encontrada.Estado == "Entregada" ||
+                encontrada.Estado == "Cancelada")
+            {
+                Console.WriteLine("La solicitud ya fue cerrada y no puede modificarse.");
+                return;
+            }
+
+            Console.WriteLine("\n1. Actualizar prioridad");
+            Console.WriteLine("2. Registrar o actualizar diagnostico");
+            Console.WriteLine("3. Actualizar estado");
+            Console.WriteLine("4. Registrar costo de mano de obra");
+
+            int opcion = Comprobar("Seleccione una opcion: ", 1, 4);
+
+            switch (opcion)
+            {
+                case 1:
+                    encontrada.Prioridad = SeleccionarPrioridad();
+                    Console.WriteLine("Prioridad actualizada.");
+                    break;
+
+                case 2:
+                    encontrada.Diagnostico = ComprobacionTexto(
+                        "Ingrese el diagnostico: ");
+                    Console.WriteLine("Diagnostico actualizado.");
+                    break;
+
+                case 3:
+                    ActualizarEstadoSolicitud(encontrada);
+                    break;
+
+                case 4:
+                    encontrada.CostoManoObra = ComprobacionDouble(
+                        "Ingrese el costo de mano de obra: Q", 0, 1000000);
+                    Console.WriteLine("Costo de mano de obra actualizado.");
+                    break;
+            }
+
+            encontrada.MostrarInformacion();
+        }
+
+        static bool EspecialidadCompatible(Tecnico tecnico, Equipo equipo)
+        {
+            if (equipo is ComputadoraPortatil)
+            {
+                return string.Equals(tecnico.Especialidad,
+                    "Computadoras portátiles", StringComparison.OrdinalIgnoreCase) ||
+                    string.Equals(tecnico.Especialidad,
+                    "Computadoras portatiles", StringComparison.OrdinalIgnoreCase);
+            }
+
+            if (equipo is ComputadoraEscritorio)
+            {
+                return string.Equals(tecnico.Especialidad,
+                    "Computadoras de escritorio", StringComparison.OrdinalIgnoreCase);
+            }
+
+            if (equipo is Impresora)
+            {
+                return string.Equals(tecnico.Especialidad,
+                    "Impresoras", StringComparison.OrdinalIgnoreCase);
+            }
+
+            return false;
+        }
+
+        static void AsignarTecnicoSolicitud(List<SolicitudServicio> solicitudes,
+            List<Tecnico> tecnicos)
+        {
+            SolicitudServicio solicitud = BuscarSolicitudPorCodigo(solicitudes);
+
+            if (solicitud == null)
+                return;
+
+            if (solicitud.Estado == "Entregada" ||
+                solicitud.Estado == "Cancelada")
+            {
+                Console.WriteLine("No se puede asignar un tecnico a una solicitud cerrada.");
+                return;
+            }
+
+            if (solicitud.TecnicoAsignado != null)
+            {
+                Console.WriteLine("La solicitud ya tiene un tecnico asignado.");
+                return;
+            }
+
+            List<Tecnico> disponibles = tecnicos.Where(t =>
+                t.TrabajosActivos < t.LimitesTrabajos &&
+                EspecialidadCompatible(t, solicitud.Equipo)).ToList();
+
+            if (disponibles.Count == 0)
+            {
+                Console.WriteLine("No hay tecnicos disponibles con la especialidad requerida.");
+                return;
+            }
+
+            Console.WriteLine("\nTecnicos disponibles:");
+
+            foreach (Tecnico tecnico in disponibles)
+            {
+                Console.WriteLine("Codigo: " + tecnico.Codigo +
+                    " | Nombre: " + tecnico.NombreCompleto +
+                    " | Trabajos activos: " + tecnico.TrabajosActivos +
+                    "/" + tecnico.LimitesTrabajos);
+            }
+
+            string codigoTecnico = ComprobacionTexto(
+                "Ingrese el codigo del tecnico: ");
+
+            Tecnico seleccionado = disponibles.FirstOrDefault(t =>
+                string.Equals(t.Codigo, codigoTecnico,
+                StringComparison.OrdinalIgnoreCase));
+
+            if (seleccionado == null)
+            {
+                Console.WriteLine("Tecnico no encontrado o no disponible para este equipo.");
+                return;
+            }
+
+            solicitud.TecnicoAsignado = seleccionado;
+            seleccionado.TrabajosActivos++;
+            solicitud.Estado = "Asignada";
+
+            Console.WriteLine("Tecnico asignado correctamente.");
+            solicitud.MostrarInformacion();
+        }
+
+        static void AgregarRepuestoSolicitud(List<SolicitudServicio> solicitudes,
+            List<Repuesto> repuestos)
+        {
+            SolicitudServicio solicitud = BuscarSolicitudPorCodigo(solicitudes);
+
+            if (solicitud == null)
+                return;
+
+            if (solicitud.Estado == "Entregada" ||
+                solicitud.Estado == "Cancelada")
+            {
+                Console.WriteLine("No se pueden agregar repuestos a una solicitud cerrada.");
+                return;
+            }
+
+            if (repuestos.Count == 0)
+            {
+                Console.WriteLine("No hay repuestos registrados.");
+                return;
+            }
+
+            MostrarRepuestos(repuestos);
+
+            string codigoRepuesto = ComprobacionTexto(
+                "Ingrese el codigo del repuesto: ");
+
+            Repuesto repuesto = repuestos.FirstOrDefault(r =>
+                string.Equals(r.Codigo, codigoRepuesto,
+                StringComparison.OrdinalIgnoreCase));
+
+            if (repuesto == null)
+            {
+                Console.WriteLine("Repuesto no encontrado.");
+                return;
+            }
+
+            if (repuesto.Existencia <= 0)
+            {
+                Console.WriteLine("El repuesto no tiene existencia disponible.");
+                return;
+            }
+
+            int cantidad = Comprobar(
+                "Ingrese la cantidad que utilizara: ", 1, repuesto.Existencia);
+
+            solicitud.AgregarRepuesto(repuesto, cantidad);
+            solicitud.MostrarInformacion();
+        }
+
+        static void MostrarSolicitudes(List<SolicitudServicio> solicitudes)
+        {
+            if (solicitudes.Count == 0)
+            {
+                Console.WriteLine("No hay solicitudes registradas.");
+                return;
+            }
+
+            foreach (SolicitudServicio solicitud in solicitudes)
+            {
+                solicitud.MostrarInformacion();
+            }
+
+            Console.WriteLine("Total de solicitudes: " + solicitudes.Count);
+        }
+
+        static void MenuSolicitudes(List<SolicitudServicio> solicitudes,
+            List<Cliente> clientes, List<Equipo> equipos,
+            List<Tecnico> tecnicos, List<Repuesto> repuestos)
+        {
+            int opcion;
+
+            do
+            {
+                Console.WriteLine("\n=================================");
+                Console.WriteLine("    GESTION DE SOLICITUDES");
+                Console.WriteLine("=================================");
+                Console.WriteLine("1. Registrar solicitud");
+                Console.WriteLine("2. Consultar solicitud");
+                Console.WriteLine("3. Actualizar solicitud");
+                Console.WriteLine("4. Asignar tecnico");
+                Console.WriteLine("5. Agregar repuesto a solicitud");
+                Console.WriteLine("6. Mostrar todas las solicitudes");
+                Console.WriteLine("7. Volver");
+
+                opcion = Comprobar("Ingrese una opcion: ", 1, 7);
+
+                switch (opcion)
+                {
+                    case 1:
+                        RegistrarSolicitud(solicitudes, clientes, equipos);
+                        break;
+
+                    case 2:
+                        ConsultarSolicitud(solicitudes);
+                        break;
+
+                    case 3:
+                        ActualizarSolicitud(solicitudes);
+                        break;
+
+                    case 4:
+                        AsignarTecnicoSolicitud(solicitudes, tecnicos);
+                        break;
+
+                    case 5:
+                        AgregarRepuestoSolicitud(solicitudes, repuestos);
+                        break;
+
+                    case 6:
+                        MostrarSolicitudes(solicitudes);
+                        break;
+
+                    case 7:
+                        Console.WriteLine("Regresando al menu principal...");
+                        break;
+                }
+
+                if (opcion != 7)
+                {
+                    Console.WriteLine("Presione una tecla para continuar...");
+                    Console.ReadKey();
+                    Console.Clear();
+                }
+
+            } while (opcion != 7);
+        }
+
+        static void MenuColas(GestorColas colas,
+            List<SolicitudServicio> solicitudes, List<Tecnico> tecnicos)
+        {
+            int opcion;
+
+            do
+            {
+                // Actualiza las colas con las solicitudes que siguen pendientes.
+                colas.Sincronizar(solicitudes);
+
+                Console.WriteLine("\n=================================");
+                Console.WriteLine("          ATENCION DE COLAS");
+                Console.WriteLine("=================================");
+                Console.WriteLine("1. Mostrar solicitudes en cola");
+                Console.WriteLine("2. Atender siguiente solicitud");
+                Console.WriteLine("3. Volver");
+
+                opcion = Comprobar("Ingrese una opcion: ", 1, 3);
+
+                switch (opcion)
+                {
+                    case 1:
+                        colas.MostrarColas();
+                        break;
+
+                    case 2:
+                        colas.AtenderSiguiente(tecnicos);
+                        break;
+
+                    case 3:
+                        Console.WriteLine("Regresando al menu principal...");
+                        break;
+                }
+
+                if (opcion != 3)
+                {
+                    Console.WriteLine("Presione una tecla para continuar...");
+                    Console.ReadKey();
+                    Console.Clear();
+                }
+
+            } while (opcion != 3);
+        }
+
         static void Main(string[] args)
         {
             List<Cliente> clientes = new List<Cliente>();
             List<Tecnico> tecnicos = new List<Tecnico>();
             List<Repuesto> repuestos = new List<Repuesto>();
             List<Equipo> equipos = new List<Equipo>();
+            List<SolicitudServicio> solicitudes = new List<SolicitudServicio>();
+            GestorColas colas = new GestorColas();
 
             int opcion;
 
@@ -1062,7 +1598,7 @@ namespace PROYECTO_XELATECH
                         break;
 
                     case 4:
-
+                        MenuSolicitudes(solicitudes, clientes, equipos, tecnicos, repuestos);
                         break;
 
                     case 5:
@@ -1072,7 +1608,7 @@ namespace PROYECTO_XELATECH
                         break;
 
                     case 6:
-
+                        MenuColas(colas, solicitudes, tecnicos);
                         break;
 
                     case 7:

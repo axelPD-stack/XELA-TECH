@@ -43,8 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="computadoraescritorio.cs" />
+    <Compile Include="colas.cs" />
+    <Compile Include="impresora.cs" />
+    <Compile Include="Detalle.Rep.cs" />
+    <Compile Include="Compu Escritorio.cs" />
     <Compile Include="equipo.cs" />
     <Compile Include="ComútadoraPortatil.cs" />
     <Compile Include="Repuestos.cs" />
