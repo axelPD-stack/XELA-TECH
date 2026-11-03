@@ -62,7 +62,6 @@ namespace PROYECTO_XELATECH
             int solicitudesAntes = solicitudes.Count;
             int repuestosAntes = repuestos.Count;
 
-            // GENERAR CLIENTES
             string[] nombres =
             {
                 "Andrea Lopez",
@@ -92,7 +91,6 @@ namespace PROYECTO_XELATECH
                 clientes.Add(nuevo);
             }
 
-            // GENERAR TECNICOS
             string[] nombresTecnicos =
             {
                 "Luis Gonzalez",
@@ -125,7 +123,7 @@ namespace PROYECTO_XELATECH
                 tecnicos.Add(nuevo);
             }
 
-            // GENERAR REPUESTOS
+            
             string[] nombresRepuestos =
             {
                 "Memoria RAM",
@@ -166,7 +164,6 @@ namespace PROYECTO_XELATECH
                 repuestos.Add(nuevo);
             }
 
-            // GENERAR EQUIPOS: uno de cada tipo.
             int clientesGenerados = clientes.Count - 3;
 
             for (int i = 0; i < 3; i++)
@@ -206,7 +203,6 @@ namespace PROYECTO_XELATECH
                 equipos.Add(nuevoEquipo);
             }
 
-            // GENERAR SOLICITUDES: cada solicitud utiliza un equipo distinto.
             string[] problemas =
             {
                 "El equipo presenta lentitud.",

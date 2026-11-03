@@ -203,7 +203,9 @@ namespace PROYECTO_XELATECH
             return opcion;
         }
 
-        // BUBBLE SORT: solicitudes por costo total, de menor a mayor.
+   
+
+
         private static void OrdenarSolicitudesPorCosto(List<SolicitudServicio> solicitudes)
         {
             if (solicitudes.Count < 2)
@@ -238,7 +240,11 @@ namespace PROYECTO_XELATECH
             }
         }
 
-        // SELECTION SORT: tecnicos por cantidad de servicios finalizados, de mayor a menor.
+       
+
+
+
+
         private static void OrdenarTecnicosPorServicios(List<Tecnico> tecnicos)
         {
             if (tecnicos.Count < 2)
@@ -278,7 +284,13 @@ namespace PROYECTO_XELATECH
             }
         }
 
-        // SHELL SORT: repuestos por existencia, de menor a mayor.
+
+
+
+
+
+
+
         private static void OrdenarRepuestosPorExistencia(List<Repuesto> repuestos)
         {
             if (repuestos.Count < 2)
@@ -320,7 +332,10 @@ namespace PROYECTO_XELATECH
             }
         }
 
-        // QUICK SORT: solicitudes por fecha de recepcion, de la mas antigua a la mas reciente.
+        
+
+
+
         private static void OrdenarSolicitudesPorFecha(List<SolicitudServicio> solicitudes)
         {
             if (solicitudes.Count < 2)
@@ -612,8 +627,7 @@ namespace PROYECTO_XELATECH
             return texto;
         }
 
-        // BUSQUEDA SECUENCIAL: encuentra todos los clientes cuyo nombre
-        // contiene el texto ingresado, sin distinguir mayusculas y minusculas.
+     
         private static void BuscarClientePorNombre(List<Cliente> clientes)
         {
             if (clientes.Count == 0)
@@ -644,8 +658,7 @@ namespace PROYECTO_XELATECH
                 Console.WriteLine("No se encontraron clientes con ese nombre.");
         }
 
-        // BUSQUEDA SECUENCIAL: muestra todas las solicitudes que coinciden
-        // con el estado ingresado.
+      
         private static void BuscarSolicitudPorEstado(List<SolicitudServicio> solicitudes)
         {
             if (solicitudes.Count == 0)
@@ -679,7 +692,7 @@ namespace PROYECTO_XELATECH
                 Console.WriteLine("No se encontraron solicitudes con ese estado.");
         }
 
-        // BUSQUEDA SECUENCIAL: encuentra todos los equipos de una marca.
+      
         private static void BuscarEquipoPorMarca(List<Equipo> equipos)
         {
             if (equipos.Count == 0)
@@ -710,9 +723,7 @@ namespace PROYECTO_XELATECH
                 Console.WriteLine("No se encontraron equipos de esa marca.");
         }
 
-        // BUSQUEDA BINARIA: primero ordena una copia por codigo mediante
-        // insercion manual y luego busca el codigo solicitado.
-        // No modifica el orden de la lista original.
+     
         private static void BuscarSolicitudPorCodigo(List<SolicitudServicio> solicitudes)
         {
             if (solicitudes.Count == 0)
@@ -724,8 +735,7 @@ namespace PROYECTO_XELATECH
             string codigo = LeerTexto("Ingrese el codigo exacto de la solicitud: ");
             List<SolicitudServicio> ordenadas = new List<SolicitudServicio>(solicitudes);
 
-            // Ordenamiento manual por codigo para cumplir el requisito previo
-            // de la busqueda binaria.
+          
             for (int i = 1; i < ordenadas.Count; i++)
             {
                 SolicitudServicio actual = ordenadas[i];
@@ -1075,7 +1085,6 @@ namespace PROYECTO_XELATECH
             Console.WriteLine("Total de equipos: " + equipos.Count);
         }
 
-        // Bubble Sort manual para ordenar las solicitudes por costo total.
         private static void ReporteSolicitudesPorCosto(List<SolicitudServicio> solicitudes)
         {
             if (solicitudes.Count < 2)
@@ -1110,7 +1119,6 @@ namespace PROYECTO_XELATECH
             }
         }
 
-        // Quick Sort manual para ordenar las solicitudes por fecha de recepcion.
         private static void ReporteSolicitudesPorFecha(List<SolicitudServicio> solicitudes)
         {
             if (solicitudes.Count < 2)
@@ -1165,7 +1173,6 @@ namespace PROYECTO_XELATECH
                 QuickSortFecha(lista, i, derecha);
         }
 
-        // Shell Sort manual para ordenar los repuestos por existencia disponible.
         private static void ReporteRepuestosPorExistencia(List<Repuesto> repuestos)
         {
             if (repuestos.Count < 2)

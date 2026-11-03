@@ -156,10 +156,6 @@ namespace PROYECTO_XELATECH
 
 
 
-        // ==========================================
-        // GESTION DE REPUESTOS
-        // ==========================================
-
         static void RegistrarRepuesto(List<Repuesto> repuestos)
         {
             int consecutivo = repuestos.Count + 1;
@@ -763,9 +759,7 @@ namespace PROYECTO_XELATECH
 
 
 
-        // ==========================================
-        // GESTION DE EQUIPOS
-        // ==========================================
+
 
         static Cliente SeleccionarPropietario(List<Cliente> clientes)
         {
@@ -1019,10 +1013,6 @@ namespace PROYECTO_XELATECH
             } while (opcion != 5);
         }
 
-
-        // ==========================================
-        // GESTION DE SOLICITUDES
-        // ==========================================
 
         static string SeleccionarPrioridad()
         {
@@ -1577,7 +1567,7 @@ namespace PROYECTO_XELATECH
 
             do
             {
-                // Actualiza las colas con las solicitudes que siguen pendientes.
+               
                 colas.Sincronizar(solicitudes);
 
                 Console.WriteLine("\n=================================");
@@ -1647,7 +1637,9 @@ namespace PROYECTO_XELATECH
                 switch (opcion)
                 {
                     case 1:
+                        Console.Clear();
                         MenuClientes(clientes);
+                        
                         break;
 
                     case 2:
