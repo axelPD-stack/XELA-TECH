@@ -43,12 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="colas.cs" />
-    <Compile Include="impresora.cs" />
+    <Compile Include="datos.cs" />
+    <Compile Include="ordenamiento, matriz y colas.cs" />
     <Compile Include="Detalle.Rep.cs" />
-    <Compile Include="Compu Escritorio.cs" />
     <Compile Include="equipo.cs" />
-    <Compile Include="ComútadoraPortatil.cs" />
     <Compile Include="Repuestos.cs" />
     <Compile Include="Tecnico.cs" />
     <Compile Include="CLientes.cs" />

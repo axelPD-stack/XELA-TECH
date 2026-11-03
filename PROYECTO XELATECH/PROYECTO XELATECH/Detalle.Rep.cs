@@ -42,12 +42,14 @@ namespace PROYECTO_XELATECH
         private Equipo equipo;
         private string descripcionProblema;
         private DateTime fechaRecepcion;
+        private DateTime? fechaAsignacion;
         private string prioridad;
         private string estado;
         private Tecnico tecnicoAsignado;
         private string diagnostico;
         private List<DetalleRepuesto> repuestosUtilizados;
         private double costoManoObra;
+        private Stack<string> historialEstados;
 
         public string Codigo
         {
@@ -102,6 +104,11 @@ namespace PROYECTO_XELATECH
             get { return fechaRecepcion; }
         }
 
+        public DateTime? FechaAsignacion
+        {
+            get { return fechaAsignacion; }
+        }
+
         public string Prioridad
         {
             get { return prioridad; }
@@ -117,30 +124,20 @@ namespace PROYECTO_XELATECH
         public string Estado
         {
             get { return estado; }
-            set
-            {
-                if (value == "Recibida" ||
-                    value == "En espera" ||
-                    value == "Asignada" ||
-                    value == "En diagnóstico" ||
-                    value == "En reparación" ||
-                    value == "Lista para entregar" ||
-                    value == "Entregada" ||
-                    value == "Cancelada")
-                {
-                    estado = value;
-                }
-                else
-                {
-                    Console.WriteLine("Dato invalido");
-                }
-            }
         }
 
         public Tecnico TecnicoAsignado
         {
             get { return tecnicoAsignado; }
-            set { tecnicoAsignado = value; }
+            set
+            {
+                tecnicoAsignado = value;
+
+                if (value != null)
+                    fechaAsignacion = DateTime.Now;
+                else
+                    fechaAsignacion = null;
+            }
         }
 
         public string Diagnostico
@@ -179,9 +176,7 @@ namespace PROYECTO_XELATECH
                 double total = 0;
 
                 foreach (DetalleRepuesto detalle in repuestosUtilizados)
-                {
                     total += detalle.Subtotal;
-                }
 
                 return total;
             }
@@ -192,9 +187,17 @@ namespace PROYECTO_XELATECH
             get { return CostoManoObra + CostoRepuestos; }
         }
 
+        public int CantidadEstadosAnteriores
+        {
+            get { return historialEstados.Count; }
+        }
+
         public SolicitudServicio(string codigo, Cliente cliente,
             Equipo equipo, string descripcionProblema, string prioridad)
         {
+            historialEstados = new Stack<string>();
+            repuestosUtilizados = new List<DetalleRepuesto>();
+
             Codigo = codigo;
             Cliente = cliente;
             Equipo = equipo;
@@ -202,25 +205,109 @@ namespace PROYECTO_XELATECH
             Prioridad = prioridad;
 
             fechaRecepcion = DateTime.Now;
-            Estado = "Recibida";
-            Diagnostico = "Pendiente";
-            TecnicoAsignado = null;
+            fechaAsignacion = null;
+            estado = "Recibida";
+            diagnostico = "Pendiente";
+            tecnicoAsignado = null;
             CostoManoObra = 0;
+        }
 
-            repuestosUtilizados = new List<DetalleRepuesto>();
+        public bool CambiarEstado(string nuevoEstado)
+        {
+            if (estado == "Entregada" || estado == "Cancelada")
+                return false;
+
+            bool cambioPermitido = false;
+
+            if (nuevoEstado == "Cancelada")
+            {
+                cambioPermitido = true;
+            }
+            else if (estado == "Recibida" &&
+                    (nuevoEstado == "En espera" || nuevoEstado == "Asignada"))
+            {
+                cambioPermitido = true;
+            }
+            else if (estado == "En espera" && nuevoEstado == "Asignada")
+            {
+                cambioPermitido = true;
+            }
+            else if (estado == "Asignada" && nuevoEstado == "En diagnóstico")
+            {
+                cambioPermitido = true;
+            }
+            else if (estado == "En diagnóstico" && nuevoEstado == "En reparación")
+            {
+                cambioPermitido = true;
+            }
+            else if (estado == "En reparación" && nuevoEstado == "Lista para entregar")
+            {
+                cambioPermitido = true;
+            }
+            else if (estado == "Lista para entregar" && nuevoEstado == "Entregada")
+            {
+                cambioPermitido = true;
+            }
+
+            if (!cambioPermitido)
+                return false;
+
+            historialEstados.Push(estado);
+            estado = nuevoEstado;
+            return true;
+        }
+
+        public string ObtenerUltimoEstadoAnterior()
+        {
+            if (historialEstados.Count == 0)
+                return "";
+
+            return historialEstados.Peek();
+        }
+
+        public bool DeshacerUltimoCambioEstado()
+        {
+            if (estado == "Entregada" || estado == "Cancelada")
+                return false;
+
+            if (historialEstados.Count == 0)
+                return false;
+
+            estado = historialEstados.Pop();
+            return true;
+        }
+
+        public void MostrarHistorialEstados()
+        {
+            Console.WriteLine("\n===== HISTORIAL DE ESTADOS =====");
+
+            if (historialEstados.Count == 0)
+            {
+                Console.WriteLine("No hay cambios de estado anteriores.");
+            }
+            else
+            {
+                int posicion = 1;
+
+                foreach (string estadoAnterior in historialEstados)
+                {
+                    Console.WriteLine(posicion + ". " + estadoAnterior);
+                    posicion++;
+                }
+            }
+
+            Console.WriteLine("Estado actual: " + Estado);
         }
 
         public void AgregarRepuesto(Repuesto repuesto, int cantidad)
         {
-            if (repuesto == null || cantidad <= 0 ||
-                cantidad > repuesto.Existencia)
+            if (repuesto == null || cantidad <= 0 || cantidad > repuesto.Existencia)
             {
                 Console.WriteLine("No se puede utilizar el repuesto.");
                 return;
             }
 
             repuesto.UtilizarRepuesto(cantidad);
-
             bool encontrado = false;
 
             foreach (DetalleRepuesto detalle in repuestosUtilizados)
@@ -235,9 +322,7 @@ namespace PROYECTO_XELATECH
 
             if (!encontrado)
             {
-                DetalleRepuesto nuevo = new DetalleRepuesto(
-                    repuesto, cantidad);
-
+                DetalleRepuesto nuevo = new DetalleRepuesto(repuesto, cantidad);
                 repuestosUtilizados.Add(nuevo);
             }
 
@@ -253,6 +338,12 @@ namespace PROYECTO_XELATECH
             Console.WriteLine("Codigo del equipo: " + Equipo.CodigoInterno);
             Console.WriteLine("Problema: " + DescripcionProblema);
             Console.WriteLine("Fecha de recepcion: " + FechaRecepcion);
+
+            if (FechaAsignacion.HasValue)
+                Console.WriteLine("Fecha de asignacion: " + FechaAsignacion.Value);
+            else
+                Console.WriteLine("Fecha de asignacion: Pendiente");
+
             Console.WriteLine("Prioridad: " + Prioridad);
             Console.WriteLine("Estado: " + Estado);
 
@@ -262,16 +353,14 @@ namespace PROYECTO_XELATECH
                 Console.WriteLine("Tecnico: Sin asignar");
 
             Console.WriteLine("Diagnostico: " + Diagnostico);
-
-            Console.WriteLine("\nRepuestos utilizados:");
+            Console.WriteLine("Repuestos utilizados:");
 
             if (RepuestosUtilizados.Count == 0)
                 Console.WriteLine("No se han utilizado repuestos.");
 
             foreach (DetalleRepuesto detalle in RepuestosUtilizados)
             {
-                Console.WriteLine(
-                    detalle.Repuesto.Nombre +
+                Console.WriteLine(detalle.Repuesto.Nombre +
                     " | Cantidad: " + detalle.Cantidad +
                     " | Subtotal: Q" + detalle.Subtotal);
             }

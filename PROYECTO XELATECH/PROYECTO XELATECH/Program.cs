@@ -1215,13 +1215,11 @@ namespace PROYECTO_XELATECH
                 return;
             }
 
-            string estadoAnterior = solicitud.Estado;
             string nuevoEstado = SeleccionarEstadoSolicitud();
 
-            if (nuevoEstado == "Entregada" &&
-                estadoAnterior != "Lista para entregar")
+            if (!solicitud.CambiarEstado(nuevoEstado))
             {
-                Console.WriteLine("Primero debe marcar la solicitud como lista para entregar.");
+                Console.WriteLine("Cambio no permitido. Revise el orden de los estados.");
                 return;
             }
 
@@ -1243,7 +1241,6 @@ namespace PROYECTO_XELATECH
                     tecnico.TrabajosActivos--;
             }
 
-            solicitud.Estado = nuevoEstado;
             Console.WriteLine("Estado de la solicitud actualizado.");
         }
 
@@ -1374,9 +1371,14 @@ namespace PROYECTO_XELATECH
                 return;
             }
 
+            if (!solicitud.CambiarEstado("Asignada"))
+            {
+                Console.WriteLine("No se pudo cambiar el estado a Asignada.");
+                return;
+            }
+
             solicitud.TecnicoAsignado = seleccionado;
             seleccionado.TrabajosActivos++;
-            solicitud.Estado = "Asignada";
 
             Console.WriteLine("Tecnico asignado correctamente.");
             solicitud.MostrarInformacion();
@@ -1431,6 +1433,55 @@ namespace PROYECTO_XELATECH
             solicitud.MostrarInformacion();
         }
 
+        static void ConsultarHistorialSolicitud(List<SolicitudServicio> solicitudes)
+        {
+            SolicitudServicio solicitud = BuscarSolicitudPorCodigo(solicitudes);
+
+            if (solicitud != null)
+                solicitud.MostrarHistorialEstados();
+        }
+
+        static void DeshacerEstadoSolicitud(List<SolicitudServicio> solicitudes)
+        {
+            SolicitudServicio solicitud = BuscarSolicitudPorCodigo(solicitudes);
+
+            if (solicitud == null)
+                return;
+
+            string estadoAnterior = solicitud.ObtenerUltimoEstadoAnterior();
+
+            if (estadoAnterior == "")
+            {
+                Console.WriteLine("No hay cambios de estado para deshacer.");
+                return;
+            }
+
+            if (solicitud.Estado == "Entregada" || solicitud.Estado == "Cancelada")
+            {
+                Console.WriteLine("No se puede deshacer el estado de una solicitud cerrada.");
+                return;
+            }
+
+            if ((estadoAnterior == "Recibida" || estadoAnterior == "En espera") &&
+                solicitud.TecnicoAsignado != null)
+            {
+                if (solicitud.TecnicoAsignado.TrabajosActivos > 0)
+                    solicitud.TecnicoAsignado.TrabajosActivos--;
+
+                solicitud.TecnicoAsignado = null;
+            }
+
+            if (solicitud.DeshacerUltimoCambioEstado())
+            {
+                Console.WriteLine("Se deshizo el ultimo cambio de estado.");
+                Console.WriteLine("Estado actual: " + solicitud.Estado);
+            }
+            else
+            {
+                Console.WriteLine("No fue posible deshacer el cambio.");
+            }
+        }
+
         static void MostrarSolicitudes(List<SolicitudServicio> solicitudes)
         {
             if (solicitudes.Count == 0)
@@ -1462,11 +1513,13 @@ namespace PROYECTO_XELATECH
                 Console.WriteLine("2. Consultar solicitud");
                 Console.WriteLine("3. Actualizar solicitud");
                 Console.WriteLine("4. Asignar tecnico");
-                Console.WriteLine("5. Agregar repuesto a solicitud");
-                Console.WriteLine("6. Mostrar todas las solicitudes");
-                Console.WriteLine("7. Volver");
+                Console.WriteLine("5. Consultar historial de estados");
+                Console.WriteLine("6. Deshacer ultimo cambio de estado");
+                Console.WriteLine("7. Agregar repuesto a solicitud");
+                Console.WriteLine("8. Mostrar todas las solicitudes");
+                Console.WriteLine("9. Volver");
 
-                opcion = Comprobar("Ingrese una opcion: ", 1, 7);
+                opcion = Comprobar("Ingrese una opcion: ", 1, 9);
 
                 switch (opcion)
                 {
@@ -1487,26 +1540,34 @@ namespace PROYECTO_XELATECH
                         break;
 
                     case 5:
-                        AgregarRepuestoSolicitud(solicitudes, repuestos);
+                        ConsultarHistorialSolicitud(solicitudes);
                         break;
 
                     case 6:
-                        MostrarSolicitudes(solicitudes);
+                        DeshacerEstadoSolicitud(solicitudes);
                         break;
 
                     case 7:
+                        AgregarRepuestoSolicitud(solicitudes, repuestos);
+                        break;
+
+                    case 8:
+                        MostrarSolicitudes(solicitudes);
+                        break;
+
+                    case 9:
                         Console.WriteLine("Regresando al menu principal...");
                         break;
                 }
 
-                if (opcion != 7)
+                if (opcion != 9)
                 {
                     Console.WriteLine("Presione una tecla para continuar...");
                     Console.ReadKey();
                     Console.Clear();
                 }
 
-            } while (opcion != 7);
+            } while (opcion != 9);
         }
 
         static void MenuColas(GestorColas colas,
@@ -1612,20 +1673,24 @@ namespace PROYECTO_XELATECH
                         break;
 
                     case 7:
-
+                        Ordenamientos.MenuOrdenamientos(solicitudes, tecnicos, repuestos);
                         break;
 
                     case 8:
-
+                        Busquedas.MenuBusquedas(clientes, solicitudes, equipos);
                         break;
 
                     case 9:
-
+                        Reportes.MenuReportes(
+                            clientes, tecnicos, equipos, solicitudes, repuestos);
                         break;
 
                     case 10:
-                        Console.WriteLine("Modulo pendiente de implementar.");
+                        GeneradorDatos.GenerarDatos(
+                            clientes, tecnicos, equipos, solicitudes, repuestos);
+                        Console.WriteLine("\nPresione una tecla para continuar...");
                         Console.ReadKey();
+                        Console.Clear();
                         break;
 
                     case 11:
